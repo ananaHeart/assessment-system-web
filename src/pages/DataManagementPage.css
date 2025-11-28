@@ -1,0 +1,57 @@
+.upload-view, .mapping-view {
+    padding: 20px;
+}
+
+.dropzone {
+    border: 2px dashed #AAAAAA;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    margin: 20px 0;
+}
+
+.dropzone:hover {
+    border-color: #50DC46;
+}
+
+.mapping-form {
+    margin: 20px 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-back {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary {
+    background: #AAAAAA;
+    color: white;
+}
+
+/* Your #50DC46 highlight rule */
+.btn-secondary:hover,
+.btn-secondary:active {
+    background-color: #50DC46 !important;
+}

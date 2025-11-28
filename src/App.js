@@ -2,32 +2,30 @@ import './App.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import LoginPage from './pages/LoginPage';
+import ActivatePage from './pages/ActivatePage';
+import UnauthorizedPage from './pages/UnauthorizedPage';
+import ProtectedRoute from './components/ProtectedRoute';
 import DashboardPage from './pages/DashboardPage';
 import PrincipalDashboardPage from './pages/PrincipalDashboardPage';
-import ActivatePage from './pages/ActivatePage';
-import ProtectedRoute from './components/ProtectedRoute';
-import UnauthorizedPage from './pages/UnauthorizedPage';
 import DataManagementPage from './pages/DataManagementPage';
 
 function App() {
   return (
     <Routes>
-      {/* Public Routes */}
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/unauthorized" element={<UnauthorizedPage />} />
       <Route path="/activate" element={<ActivatePage />} />
+      <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
-      <Route element={<ProtectedRoute allowedRole="ROLE_TEACHER" />}>
-
+      {/* Teacher Protected Routes */}
+      <Route element={<ProtectedRoute allowedRole="teacher" />}>
         <Route path="/teacher/dashboard" element={<DashboardPage />} />
-        <Route path="/teacher/data-management" element={<DataManagementPage />} />
       </Route>
       
       {/* Principal Protected Routes */}
-      <Route element={<ProtectedRoute allowedRole="ROLE_PRINCIPAL" />}> 
-
+      <Route element={<ProtectedRoute allowedRole="principal" />}> 
         <Route path="/principal/dashboard" element={<PrincipalDashboardPage />} />
+        <Route path="/principal/data-management" element={<DataManagementPage />} />
       </Route>
       
     </Routes>

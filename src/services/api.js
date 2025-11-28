@@ -1,56 +1,46 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:8080';  // Your backend URL
-const api = axios.create({
-  baseURL: API_BASE,
-  withCredentials: true,  // If using cookies/sessions
+const API_BASE_URL = 'http://localhost:8080/api';
+
+const apiClient = axios.create({
+    baseURL: API_BASE_URL,
+    headers: { 'Content-Type': 'application/json' },
 });
 
-// Interceptor to add JWT token
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('jwtToken');  // Or from context/state
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+apiClient.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('jwtToken');
+        if (token) config.headers.Authorization = `Bearer ${token}`;
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
-export const enrollmentService = {
-  parseFile: (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    return api.post('/process-enrollment-file/parse', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-  },
-  saveAssignments: (data) => api.post('/process-enrollment-file/save', data),
+apiClient.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('jwtToken');
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
+    }
+);
+
+export const api = {
+    auth: {
+        login: (credentials) => apiClient.post('/auth/login', credentials),
+        verifyEmail: (email) => apiClient.post('/auth/verify', { email }),
+        activateAccount: (data) => apiClient.post('/auth/activate', data),
+    },
+    import: {
+        analyze: (formData) => apiClient.post('/import/analyze', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }),
+        process: (formData) => apiClient.post('/import/process', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }),
+    },
 };
 
-api.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-const handleUpload = async () => {
-  const formData = new FormData();
-  formData.append('file', selectedFile);
-
-  try {
-    const response = await api.post('/process-enrollment-file/parse', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
-    console.log("Success:", response.data);
-  } catch (err) {
-    console.error("Error:", err.response?.data);
-    alert("Upload failed: " + (err.response?.data || "Unauthorized"));
-  }
-};
-
-export default api;
+export default apiClient;

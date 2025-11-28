@@ -1,0 +1,40 @@
+.activate-page-wrapper {
+  background-color: #e0f7ff;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.progress-bar-inner {
+    height: 100%;
+    background-color: #50DC46;
+    width: 0;
+    transition: width 0.3s ease-in-out;
+}
+
+.btn-back {
+    background-color: #6c757d;
+}
+.btn-back:hover {
+    background-color: #5a6268;
+}
+
+/* Fix for the select dropdown to match other inputs */
+select.form-group.input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
